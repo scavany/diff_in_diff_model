@@ -7,8 +7,8 @@ source("./diff_in_diff_fn.R")
 state.1 <- c(S=899,I=1,R=100)
 state.2 <- c(S=890,I=10,R=100)
 beta <- 1/15
-gamma <- 1/30
-parms <- c(beta=beta,gamma=gamma)
+gam <- 1/30
+parms <- c(beta=beta,beta.0=beta,gam=gam,amp=0)
 out.det.1 <- sir.model(seq(0,60,0.1),state.1,parms)
 out.det.2 <- sir.model(seq(0,60,0.1),state.2,parms)
 
@@ -45,6 +45,14 @@ abline(h=0,lty=2)
 par(mfrow=c(1,2))
 plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3)
 lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
+plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red')
+lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
+
+## Difference in difference of cumulative incidence 
+par(mfrow=c(1,2))
+plot(out.det.1$time,out.det.1$cumincidence,col="red",type='l',lwd=3)
+lines(out.det.2$time,out.det.2$cumincidence,col="green",lwd=3)
+
 plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red')
 lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
 
