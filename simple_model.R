@@ -62,7 +62,7 @@ plot(out.det.1$time,beta.t(out.det.1$time,parms.t[["beta.0"]],parms.t[["amp"]]),
 par(mfrow=c(1,3))
 plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,xlab="time (days)",ylab="I")
 lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
-plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red',xlab="Cumulative incidence",ylab="Rt"))
+plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red',xlab="Cumulative incidence",ylab="Rt")
 lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
 RtvCuminc <- approxfun(out.det.1$R+out.det.1$I,Rt.1)
 plot(out.det.1$R+out.det.1$I,RtvCuminc(out.det.2$R+out.det.2$I)-Rt.2,xlab="Cumulative incidence",ylab="Difference in Rt estimates")
@@ -76,7 +76,27 @@ out.det.2 <- sir.model(seq(0,360,0.1),state.2,parms.t)
 par(mfrow=c(1,3))
 plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,xlab="time (days)",ylab="I")
 lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
-plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red',xlab="Cumulative incidence",ylab="Rt"))
+plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red',xlab="Cumulative incidence",ylab="Rt")
+lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
+RtvCuminc <- approxfun(out.det.1$R+out.det.1$I,Rt.1)
+plot(out.det.1$R+out.det.1$I,RtvCuminc(out.det.2$R+out.det.2$I)-Rt.2,xlab="Cumulative incidence",ylab="Difference in Rt estimates")
+
+##
+
+## Different beta values 
+parms.t1 <- c(beta=1/10,gamma=gamma,beta.0=1/10,amp=1/30)
+parms.t2 <- c(beta=1/20,gamma=gamma,beta.0=1/20,amp=1/30)
+
+out.det.1 <- sir.model(seq(0,360,0.1),state.1,parms.t1)
+out.det.2 <- sir.model(seq(0,360,0.1),state.2,parms.t2)
+
+
+Rt.1 <- R0 * out.det.1$S/(out.det.1$S+out.det.1$I+out.det.1$R)
+Rt.2 <- R0 * out.det.2$S/(out.det.2$S+out.det.2$I+out.det.2$R)
+
+plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,xlab="time (days)",ylab="I")
+lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
+plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red',xlab="Cumulative incidence",ylab="Rt")
 lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
 RtvCuminc <- approxfun(out.det.1$R+out.det.1$I,Rt.1)
 plot(out.det.1$R+out.det.1$I,RtvCuminc(out.det.2$R+out.det.2$I)-Rt.2,xlab="Cumulative incidence",ylab="Difference in Rt estimates")
