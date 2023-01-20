@@ -94,6 +94,34 @@ plot(out.det.1$R+out.det.1$I,RtvCuminc(out.det.2$R+out.det.2$I)-out.det.2$Rt,xla
 dev.off()
 
 
+## Non-time varying parameters. Pops have different parameters. Diff start conditions
+t <- seq(from = 0, to = 360, by = .1)
+beta <- 1/15
+gam <- 1/30
+state.1 <- c(S=899,I=1,R=100)
+state.2 <- c(S=890,I=10,R=100)
+parms.1 <- c(beta=beta,gam=gam,beta.0=1/10,amp=0/30)
+parms.2 <- c(beta=beta,gam=gam,beta.0=1/20,amp=0/30)
+
+out.det.1 <- sir.model(seq(0,360,0.1),state.1,parms.1)
+out.det.2 <- sir.model(seq(0,360,0.1),state.2,parms.2)
+
+
+pdf("diffparameters.pdf", pointsize = 16)
+
+par(mfrow=c(1,3))
+plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,xlab="time (days)",ylab="I")
+lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
+plot(out.det.1$R+out.det.1$I,out.det.1$Rt,type='l',col='red',xlab="Cumulative incidence",ylab="Rt",lwd=3)
+lines(out.det.2$R+out.det.2$I,out.det.2$Rt,col='green',lwd=3)
+
+RtvCuminc <- approxfun(out.det.1$R+out.det.1$I,out.det.1$Rt)
+plot(out.det.1$R+out.det.1$I,RtvCuminc(out.det.2$R+out.det.2$I)-out.det.2$Rt,xlab="Cumulative incidence",ylab="Difference in Rt estimates")
+
+
+dev.off()
+
+
 
 ## Time varying parameters. Both pops same parameters. Diff start conditions
 t <- seq(from = 0, to = 360, by = .1)
