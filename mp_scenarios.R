@@ -1,10 +1,10 @@
 if(!require(pacman)){install.packages('pacman');library(pacman)}
-p_load(deSolve,
-       adaptivetau)
+p_load(deSolve, adaptivetau)
 
 library(glue)
 library(purrr)
 library(this.path)
+library(tidyverse)
 
 codepath <- this.path::here()
 
@@ -54,6 +54,35 @@ plotdid(output_1a$incidentcases, output_1b$incidentcases, did_1$incidentcases,
 plotdid(log(output_1a$incidentcases), log(output_1b$incidentcases), logdid_1$incidentcases, 
   "log(Incident cases)")
 
+## difference in difference with baseline set to same point prevalence 
+outputi10_1a <- clipdf(output_1a)
+outputi10_1b <- clipdf(output_1b)
+didi10_1 <- diffindiff(outputi10_1a, outputi10_1b)
+logdidi10_1 <- logdiffindiff(outputi10_1a, outputi10_1b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_1a$I, outputi10_1b$I, didi10_1$I, "I")
+plotdid(log(outputi10_1a$I), log(outputi10_1b$I), logdidi10_1$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_1a$R0, outputi10_1b$R0, didi10_1$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_1a$Rt, outputi10_1b$Rt, didi10_1$Rt, "Rt")
+plotdid(log(outputi10_1a$Rt), log(outputi10_1b$Rt), logdidi10_1$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_1a$cumincidence, outputi10_1b$cumincidence, didi10_1$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_1a$cumincidence), log(outputi10_1b$cumincidence), logdidi10_1$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_1a$incidentcases, outputi10_1b$incidentcases, didi10_1$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_1a$incidentcases), log(outputi10_1b$incidentcases), logdidi10_1$incidentcases, 
+        "log(Incident cases)")
+
 
 ## Scenario 2: Same parameters but different initial conditions (different population 
 # size and same proportions initially infected)
@@ -95,6 +124,35 @@ plotdid(output_2a$incidentcases, output_2b$incidentcases, did_2$incidentcases,
 plotdid(log(output_2a$incidentcases), log(output_2b$incidentcases), logdid_2$incidentcases, 
   "log(Incident cases)")
 
+## difference in difference with baseline set to same point prevalence 
+outputi10_2a <- clipdf(output_2a)
+outputi10_2b <- clipdf(output_2b)
+didi10_2 <- diffindiff(outputi10_2a, outputi10_2b)
+logdidi10_2 <- logdiffindiff(outputi10_2a, outputi10_2b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_2a$I, outputi10_2b$I, didi10_2$I, "I")
+plotdid(log(outputi10_2a$I), log(outputi10_2b$I), logdidi10_2$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_2a$R0, outputi10_2b$R0, didi10_2$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_2a$Rt, outputi10_2b$Rt, didi10_2$Rt, "Rt")
+plotdid(log(outputi10_2a$Rt), log(outputi10_2b$Rt), logdidi10_2$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_2a$cumincidence, outputi10_2b$cumincidence, didi10_2$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_2a$cumincidence), log(outputi10_2b$cumincidence), logdidi10_2$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_2a$incidentcases, outputi10_2b$incidentcases, didi10_2$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_2a$incidentcases), log(outputi10_2b$incidentcases), logdidi10_2$incidentcases, 
+        "log(Incident cases)")
+
 
 ## Scenario 3: Same parameters, time-varying beta, but different initial conditions 
 # (same population size and different proportions infected)
@@ -126,14 +184,44 @@ plotdid(log(output_3a$Rt), log(output_3b$Rt), logdid_3$Rt, "log(Rt)")
 
 ### Difference in differences of cumulative incidence 
 plotdid(output_3a$cumincidence, output_3b$cumincidence, did_3$cumincidence, 
-        "Cumulative incidence")
+  "Cumulative incidence")
 plotdid(log(output_3a$cumincidence), log(output_3b$cumincidence), logdid_3$cumincidence, 
-        "log(Cumulative incidence)")
+  "log(Cumulative incidence)")
 
 ### Difference in differences of incident cases
 plotdid(output_3a$incidentcases, output_3b$incidentcases, did_3$incidentcases, 
-        "Incident cases")
+  "Incident cases")
 plotdid(log(output_3a$incidentcases), log(output_3b$incidentcases), logdid_3$incidentcases, 
+  "log(Incident cases)")
+
+
+## difference in difference with baseline set to same point prevalence 
+outputi10_3a <- clipdf(output_3a)
+outputi10_3b <- clipdf(output_3b)
+didi10_3 <- diffindiff(outputi10_3a, outputi10_3b)
+logdidi10_3 <- logdiffindiff(outputi10_3a, outputi10_3b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_3a$I, outputi10_3b$I, didi10_3$I, "I")
+plotdid(log(outputi10_3a$I), log(outputi10_3b$I), logdidi10_3$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_3a$R0, outputi10_3b$R0, didi10_3$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_3a$Rt, outputi10_3b$Rt, didi10_3$Rt, "Rt")
+plotdid(log(outputi10_3a$Rt), log(outputi10_3b$Rt), logdidi10_3$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_3a$cumincidence, outputi10_3b$cumincidence, didi10_3$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_3a$cumincidence), log(outputi10_3b$cumincidence), logdidi10_3$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_3a$incidentcases, outputi10_3b$incidentcases, didi10_3$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_3a$incidentcases), log(outputi10_3b$incidentcases), logdidi10_3$incidentcases, 
         "log(Incident cases)")
 
 
@@ -167,14 +255,44 @@ plotdid(log(output_4a$Rt), log(output_4b$Rt), logdid_4$Rt, "log(Rt)")
 
 ### Difference in differences of cumulative incidence 
 plotdid(output_4a$cumincidence, output_4b$cumincidence, did_4$cumincidence, 
-        "Cumulative incidence")
+  "Cumulative incidence")
 plotdid(log(output_4a$cumincidence), log(output_4b$cumincidence), logdid_4$cumincidence, 
-        "log(Cumulative incidence)")
+  "log(Cumulative incidence)")
 
 ### Difference in differences of incident cases
 plotdid(output_4a$incidentcases, output_4b$incidentcases, did_4$incidentcases, 
-        "Incident cases")
+  "Incident cases")
 plotdid(log(output_4a$incidentcases), log(output_4b$incidentcases), logdid_4$incidentcases, 
+  "log(Incident cases)")
+
+
+## difference in difference with baseline set to same point prevalence 
+outputi10_4a <- clipdf(output_4a)
+outputi10_4b <- clipdf(output_4b)
+didi10_4 <- diffindiff(outputi10_4a, outputi10_4b)
+logdidi10_4 <- logdiffindiff(outputi10_4a, outputi10_4b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_4a$I, outputi10_4b$I, didi10_4$I, "I")
+plotdid(log(outputi10_4a$I), log(outputi10_4b$I), logdidi10_4$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_4a$R0, outputi10_4b$R0, didi10_4$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_4a$Rt, outputi10_4b$Rt, didi10_4$Rt, "Rt")
+plotdid(log(outputi10_4a$Rt), log(outputi10_4b$Rt), logdidi10_4$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_4a$cumincidence, outputi10_4b$cumincidence, didi10_4$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_4a$cumincidence), log(outputi10_4b$cumincidence), logdidi10_4$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_4a$incidentcases, outputi10_4b$incidentcases, didi10_4$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_4a$incidentcases), log(outputi10_4b$incidentcases), logdidi10_4$incidentcases, 
         "log(Incident cases)")
 
 
@@ -212,14 +330,44 @@ plotdid(log(output_5a$Rt), log(output_5b$Rt), logdid_5$Rt, "log(Rt)")
 
 ### Difference in differences of cumulative incidence 
 plotdid(output_5a$cumincidence, output_5b$cumincidence, did_5$cumincidence, 
-        "Cumulative incidence")
+  "Cumulative incidence")
 plotdid(log(output_5a$cumincidence), log(output_5b$cumincidence), logdid_5$cumincidence, 
-        "log(Cumulative incidence)")
+  "log(Cumulative incidence)")
 
 ### Difference in differences of incident cases
 plotdid(output_5a$incidentcases, output_5b$incidentcases, did_5$incidentcases, 
-        "Incident cases")
+  "Incident cases")
 plotdid(log(output_5a$incidentcases), log(output_5b$incidentcases), logdid_5$incidentcases, 
+  "log(Incident cases)")
+
+
+## difference in difference with baseline set to same point prevalence 
+outputi10_5a <- clipdf(output_5a)
+outputi10_5b <- clipdf(output_5b)
+didi10_5 <- diffindiff(outputi10_5a, outputi10_5b)
+logdidi10_5 <- logdiffindiff(outputi10_5a, outputi10_5b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_5a$I, outputi10_5b$I, didi10_5$I, "I")
+plotdid(log(outputi10_5a$I), log(outputi10_5b$I), logdidi10_5$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_5a$R0, outputi10_5b$R0, didi10_5$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_5a$Rt, outputi10_5b$Rt, didi10_5$Rt, "Rt")
+plotdid(log(outputi10_5a$Rt), log(outputi10_5b$Rt), logdidi10_5$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_5a$cumincidence, outputi10_5b$cumincidence, didi10_5$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_5a$cumincidence), log(outputi10_5b$cumincidence), logdidi10_5$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_5a$incidentcases, outputi10_5b$incidentcases, didi10_5$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_5a$incidentcases), log(outputi10_5b$incidentcases), logdidi10_5$incidentcases, 
         "log(Incident cases)")
 
 
@@ -257,14 +405,44 @@ plotdid(log(output_6a$Rt), log(output_6b$Rt), logdid_6$Rt, "log(Rt)")
 
 ### Difference in differences of cumulative incidence 
 plotdid(output_6a$cumincidence, output_6b$cumincidence, did_6$cumincidence, 
-        "Cumulative incidence")
+  "Cumulative incidence")
 plotdid(log(output_6a$cumincidence), log(output_6b$cumincidence), logdid_6$cumincidence, 
-        "log(Cumulative incidence)")
+  "log(Cumulative incidence)")
 
 ### Difference in differences of incident cases
 plotdid(output_6a$incidentcases, output_6b$incidentcases, did_6$incidentcases, 
-        "Incident cases")
+  "Incident cases")
 plotdid(log(output_6a$incidentcases), log(output_6b$incidentcases), logdid_6$incidentcases, 
+  "log(Incident cases)")
+
+
+## difference in difference with baseline set to same point prevalence 
+outputi10_6a <- clipdf(output_6a)
+outputi10_6b <- clipdf(output_6b)
+didi10_6 <- diffindiff(outputi10_6a, outputi10_6b)
+logdidi10_6 <- logdiffindiff(outputi10_6a, outputi10_6b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_6a$I, outputi10_6b$I, didi10_6$I, "I")
+plotdid(log(outputi10_6a$I), log(outputi10_6b$I), logdidi10_6$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_6a$R0, outputi10_6b$R0, didi10_6$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_6a$Rt, outputi10_6b$Rt, didi10_6$Rt, "Rt")
+plotdid(log(outputi10_6a$Rt), log(outputi10_6b$Rt), logdidi10_6$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_6a$cumincidence, outputi10_6b$cumincidence, didi10_6$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_6a$cumincidence), log(outputi10_6b$cumincidence), logdidi10_6$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_6a$incidentcases, outputi10_6b$incidentcases, didi10_6$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_6a$incidentcases), log(outputi10_6b$incidentcases), logdidi10_6$incidentcases, 
         "log(Incident cases)")
 
 
@@ -302,12 +480,41 @@ plotdid(log(output_7a$Rt), log(output_7b$Rt), logdid_7$Rt, "log(Rt)")
 
 ### Difference in differences of cumulative incidence 
 plotdid(output_7a$cumincidence, output_7b$cumincidence, did_7$cumincidence, 
-        "Cumulative incidence")
+  "Cumulative incidence")
 plotdid(log(output_7a$cumincidence), log(output_7b$cumincidence), logdid_7$cumincidence, 
-        "log(Cumulative incidence)")
+  "log(Cumulative incidence)")
 
 ### Difference in differences of incident cases
 plotdid(output_7a$incidentcases, output_7b$incidentcases, did_7$incidentcases, 
-        "Incident cases")
+  "Incident cases")
 plotdid(log(output_7a$incidentcases), log(output_7b$incidentcases), logdid_7$incidentcases, 
+  "log(Incident cases)")
+
+## difference in difference with baseline set to same point prevalence 
+outputi10_7a <- clipdf(output_7a)
+outputi10_7b <- clipdf(output_7b)
+didi10_7 <- diffindiff(outputi10_7a, outputi10_7b)
+logdidi10_7 <- logdiffindiff(outputi10_7a, outputi10_7b)
+
+### Difference in differences of point prevalence
+plotdid(outputi10_7a$I, outputi10_7b$I, didi10_7$I, "I")
+plotdid(log(outputi10_7a$I), log(outputi10_7b$I), logdidi10_7$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(outputi10_7a$R0, outputi10_7b$R0, didi10_7$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(outputi10_7a$Rt, outputi10_7b$Rt, didi10_7$Rt, "Rt")
+plotdid(log(outputi10_7a$Rt), log(outputi10_7b$Rt), logdidi10_7$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(outputi10_7a$cumincidence, outputi10_7b$cumincidence, didi10_7$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(outputi10_7a$cumincidence), log(outputi10_7b$cumincidence), logdidi10_7$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(outputi10_7a$incidentcases, outputi10_7b$incidentcases, didi10_7$incidentcases, 
+        "Incident cases")
+plotdid(log(outputi10_7a$incidentcases), log(outputi10_7b$incidentcases), logdidi10_7$incidentcases, 
         "log(Incident cases)")

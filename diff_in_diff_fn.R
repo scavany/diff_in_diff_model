@@ -43,7 +43,21 @@ beta.t <- function(t, parameters) {
 ## Calculate difference in differences between two dataframes
 
 diffindiff <- function(outputa, outputb) {
-  diff = outputb - outputa 
+  # Make the two dataframes the same size
+  nrowa = nrow(outputa)
+  nrowb = nrow(outputb)
+  if (nrowa > nrowb) {
+    oa <- outputa
+    ob <- outputb[1:nrowa, ]
+  } else if (nrowa < nrowb) {
+    oa <- outputa[1:nrowb, ]
+    ob <- outputb
+  } else {
+    oa <- outputa
+    ob <- outputb
+  }
+
+  diff = ob - oa 
   n = nrow(diff)
   sub = diff[rep(2, n), ] # subtract row 2 as row 1 has artefacts due to no new cases
   diffindiff = diff - sub
@@ -51,7 +65,21 @@ diffindiff <- function(outputa, outputb) {
 }
 
 logdiffindiff <- function(outputa, outputb) {
-  diff = log(outputb + 1e-24) - log(outputa + 1e-24) 
+  # Make the two dataframes the same size
+  nrowa = nrow(outputa)
+  nrowb = nrow(outputb)
+  if (nrowa > nrowb) {
+    oa <- outputa
+    ob <- outputb[1:nrowa, ]
+  } else if (nrowa < nrowb) {
+    oa <- outputa[1:nrowb, ]
+    ob <- outputb
+  } else {
+    oa <- outputa
+    ob <- outputb
+  }
+  
+  diff = log(ob + 1e-24) - log(oa + 1e-24) 
   n = nrow(diff)
   sub = diff[rep(2, n), ] # subtract row 2 as row 1 has artefacts due to no new cases
   diffindiff = diff - sub
@@ -66,4 +94,16 @@ plotdid <- function(v1, v2, diff, ylab, ylab2 = "") {
   lines(v2[-1], col = "blue", type = 'l', lwd = 3)
   plot(diff[-1], type = 'l', lwd = 3, xlab = "Time", ylab = glue("Difference in differences ", ylab2))
   abline(h = 0)
+}
+
+
+## Limit dataframes to times after I reaches a minimum threshold
+
+clipdf <- function(df, Ic = 10) {
+  dff <- df %>% 
+    filter(I >= Ic)
+  dfft = min((dff$time))
+  dfc <- df %>% 
+    filter(time >= dfft)
+  return(dfc)
 }
