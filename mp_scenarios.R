@@ -224,7 +224,7 @@ plotdid(log(output_5a$incidentcases), log(output_5b$incidentcases), logdid_5$inc
 
 
 ## Scenario 6: Beta parameters differ (not time-varying) but other parameters the same,
-# same initial conditions 
+ # same initial conditions 
 
 times_6 <- seq(0, 360, 1)
 p_6a <- c(
@@ -268,7 +268,46 @@ plotdid(log(output_6a$incidentcases), log(output_6b$incidentcases), logdid_6$inc
         "log(Incident cases)")
 
 
+## Scenario 7: Beta parameters differ, time-varying in the same proportion. Other 
+ # parameters the same and same initial conditions 
 
+times_7 <- seq(0, 360, 1)
+p_7a <- c(
+  beta.0 = 1 / 15,
+  gam = 1 / 30,
+  amp = .3 / 15
+)
+p_7b <- c(
+  beta.0 = 1.3 / 15,
+  gam = 1 / 30,
+  amp = 1.3 * .3 / 15
+)
+u0_7 <- c(S =  898, I = 2, R = 100)
 
+output_7a <- sir.model(times_7, u0_7, p_7a)
+output_7b <- sir.model(times_7, u0_7, p_7b)
+did_7 <- diffindiff(output_7a, output_7b)
+logdid_7 <- logdiffindiff(output_7a, output_7b)
 
+### Difference in differences of point prevalence
+plotdid(output_7a$I, output_7b$I, did_7$I, "I")
+plotdid(log(output_7a$I), log(output_7b$I), logdid_7$I, "log(I)")
 
+### Difference in differences of R0 
+plotdid(output_7a$R0, output_7b$R0, did_7$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(output_7a$Rt, output_7b$Rt, did_7$Rt, "Rt")
+plotdid(log(output_7a$Rt), log(output_7b$Rt), logdid_7$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(output_7a$cumincidence, output_7b$cumincidence, did_7$cumincidence, 
+        "Cumulative incidence")
+plotdid(log(output_7a$cumincidence), log(output_7b$cumincidence), logdid_7$cumincidence, 
+        "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(output_7a$incidentcases, output_7b$incidentcases, did_7$incidentcases, 
+        "Incident cases")
+plotdid(log(output_7a$incidentcases), log(output_7b$incidentcases), logdid_7$incidentcases, 
+        "log(Incident cases)")
