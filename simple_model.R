@@ -2,59 +2,54 @@ if(!require(pacman)){install.packages('pacman');library(pacman)}
 p_load(deSolve,
        adaptivetau)
 
-source("./diff_in_diff_fn.R")
+library(glue)
+library(purrr)
+library(this.path)
 
-state.1 <- c(S=899,I=1,R=100)
-state.2 <- c(S=890,I=10,R=100)
-beta <- 1/15
-gam <- 1/30
-parms <- c(beta=beta,beta.0=beta,gam=gam,amp=0)
-out.det.1 <- sir.model(seq(0,60,0.1),state.1,parms)
-out.det.2 <- sir.model(seq(0,60,0.1),state.2,parms)
+codepath <- this.path::here()
 
-## Same parameters, different initial conditions
-## Difference in difference of prevalence at different time points
-## Null intervention at t=0 
-par(mfrow=c(1,2))
-plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,log="y")
-lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
-plot(out.det.1$time,(out.det.1$I-out.det.2$I)-(state.1[["I"]]-state.2[["I"]]),type='l',lwd=3,xlab="time (days)",ylab="DiD")
-abline(h=0)
-abline(h=-(state.1[["I"]]-state.2[["I"]]),lty=2)
+source(glue(codepath, "/diff_in_diff_fn.R"))
 
-## Difference in difference of log(prevalence) at different time points
-## Null intervention at t=0 
-par(mfrow=c(1,2))
-plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3,log="y")
-lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
-lines(out.det.1$time,out.det.2$I/(state.2[["I"]]/state.1[["I"]]),col="green",lwd=3,lty=2)
-plot(out.det.1$time,(log(out.det.1$I)-log(out.det.2$I))-(log(state.1[["I"]])-log(state.2[["I"]])),
-     type='l',lwd=3,xlab="time (days)",ylab="DiD")
 
-## Difference in difference of Rt 
-par(mfrow=c(1,2))
-plot(out.det$time,out.det.1$I,col="red",type='l',lwd=3)
-lines(out.det$time,out.det.2$I,col="green",lwd=3)
-R0 <- parms[["beta"]]/parms[["gamma"]]
-Rt.1 <- R0 * out.det.1$S/(out.det.1$S+out.det.1$I+out.det.1$R)
-Rt.2 <- R0 * out.det.2$S/(out.det.2$S+out.det.2$I+out.det.2$R)
-plot(out.det.1$time,(Rt.1-Rt.2)-(Rt.1[1]-Rt.2[1]),
-     type='l',lwd=3,xlab="time (days)",ylab="DiD")
-abline(h=0,lty=2)
+## Run models with no intervention -- i.e. we would want our analysis to detect 
+ # that there was *no difference* in differences
 
-par(mfrow=c(1,2))
-plot(out.det.1$time,out.det.1$I,col="red",type='l',lwd=3)
-lines(out.det.1$time,out.det.2$I,col="green",lwd=3)
-plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red')
-lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
+## Section 1: Same parameters but different initial conditions (same population 
+ # size and different proportions infected)
 
-## Difference in difference of cumulative incidence 
-par(mfrow=c(1,2))
-plot(out.det.1$time,out.det.1$cumincidence,col="red",type='l',lwd=3)
-lines(out.det.2$time,out.det.2$cumincidence,col="green",lwd=3)
+times_1 <- seq(0, 360, 1)
+p_1 <- c(
+  beta.0 = 1 / 15,
+  gam = 1 / 30,
+  amp = 0 # i.e. beta is constant over time
+)
+u0_1a <- c(S = 899, I =  1, R = 100)
+u0_1b <- c(S = 890, I = 10, R = 100)
 
-plot(out.det.1$R+out.det.1$I,Rt.1,type='l',col='red')
-lines(out.det.2$R+out.det.2$I,Rt.2,col='green')
+output_1a <- sir.model(times_1, u0_1a, p_1)
+output_1b <- sir.model(times_1, u0_1b, p_1)
+did_1 <- diffindiff(output_1a, output_1b)
+logdid_1 <- logdiffindiff(output_1a, output_1b)
+
+### Difference in differences of point prevalence
+plotdid(output_1a$I, output_1b$I, did_1$I, "I")
+plotdid(log(output_1a$I), log(output_1b$I), logdid_1$I, "log(I)")
+
+### Difference in differences of R0 
+plotdid(output_1a$R0, output_1b$R0, did_1$R0, "R0")
+
+### Difference in differences of Rt
+plotdid(output_1a$Rt, output_1b$Rt, did_1$Rt, "Rt")
+plotdid(log(output_1a$Rt), log(output_1b$Rt), logdid_1$Rt, "log(Rt)")
+
+### Difference in differences of cumulative incidence 
+plotdid(output_1a$cumincidence, output_1b$cumincidence, did_1$cumincidence, "Cumulative incidence")
+plotdid(log(output_1a$cumincidence), log(output_1b$cumincidence), logdid_1$cumincidence, "log(Cumulative incidence)")
+
+### Difference in differences of incident cases
+plotdid(output_1a$incidentcases, output_1b$incidentcases, did_1$incidentcases, "Incident cases")
+plotdid(log(output_1a$incidentcases), log(output_1b$incidentcases), logdid_1$incidentcases, "log(Incident cases)")
+
 
 ## time-varying beta
 parms.t <- c(beta=beta,gamma=gamma,beta.0=beta,amp=1/30)
