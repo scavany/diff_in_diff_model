@@ -88,12 +88,14 @@ logdiffindiff <- function(outputa, outputb) {
 
 ## Plot values and the difference in differences
 
-plotdid <- function(v1, v2, diff, ylab, ylab2 = "") {
-  par(mfrow=c(1, 2))
+plotdid <- function(v1, v2, diff, ylab, ylab2 = "", vline = NULL, height = 3, width = 4) {
+  par(fin = c(height, width), mfrow=c(1, 2))
   plot(v1[-1], col = "red", type = 'l', lwd = 3, xlab = "Time", ylab = ylab)
   lines(v2[-1], col = "blue", type = 'l', lwd = 3)
+  if (!is.null(vline)) abline(v = vline)
   plot(diff[-1], type = 'l', lwd = 3, xlab = "Time", ylab = glue("Difference in differences ", ylab2))
   abline(h = 0)
+  if (!is.null(vline)) abline(v = vline)
 }
 
 
